@@ -28,7 +28,7 @@ function getNextCollectionDate() {
 
 /**
  * 満杯検知API
- * 【ステップ1】 リクエスト: M5StackがRenderのAPIエンドポイントを叩く
+ * 【ステップ1】 リクエスト: M5StackからRenderへ
  */
 app.post('/api/trash-full', async (req, res) => {
     try {
@@ -36,8 +36,8 @@ app.post('/api/trash-full', async (req, res) => {
         console.log(`[Step 1 & 2] 処理開始: 対象日 ${targetDate}`);
 
         // --- Step 2 & 3: DB挿入 ＆ 重複判定 ---
-        // 【ステップ2】 DB挿入試行: RenderからSupabaseに target_date を INSERT
-        // 【ステップ3】 重複判定: UNIQUE制約(ON CONFLICT)で、すでに登録済なら何もしない
+        // 【ステップ2】 DB挿入試行 (Supabase)
+        // 【ステップ3】 UNIQUE制約でエラーなら終了 (二重送信防止)
         const insertQuery = `
             INSERT INTO notifications (target_date, status)
             VALUES ($1, 'pending')
@@ -46,51 +46,55 @@ app.post('/api/trash-full', async (req, res) => {
         `;
         const result = await db.query(insertQuery, [targetDate]);
 
-        // 重複していた場合（result.rows が空 ＝ すでに INSERT されている）
         if (result.rows.length === 0) {
-            console.log(' -> [Step 3] すでに今日分は通知済みです。スキップします。');
+            console.log(' -> [Step 3] すでに本日分はLINE送信済みのためスキップします。');
             return res.json({ success: true, message: 'Already processed today' });
         }
 
         const notificationId = result.rows[0].id;
         console.log(` -> [Step 3] DB登録成功 (ID: ${notificationId})`);
 
-        // --- Step 4: チームメンバーの Firebase API を叩く ---
-        // 【ステップ4】 Firebase API 発火: fetchを使い、チームメンバーが作ったAPIを叩く
-        // ※チームメンバーに「Firebase Cloud FunctionsなどのURL」をもらってください
-        const FIREBASE_NOTIFY_URL = process.env.FIREBASE_NOTIFY_URL; 
+        // --- Step 4: LINE Messaging API 発火 ---
+        // 【ステップ4】 fetchを使い、LINEにメッセージを送る
+        const LINE_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+        const LINE_USER_ID = process.env.LINE_USER_ID; // 送信先のID
         
-        console.log(' -> [Step 4] Firebase API発火中...');
-        const firebaseResponse = await fetch(FIREBASE_NOTIFY_URL, {
+        console.log(' -> [Step 4] LINE API発火中...');
+        const lineResponse = await fetch('https://api.line.me/v2/bot/message/push', {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
-                'X-Firebase-API-Key': process.env.FIREBASE_API_KEY // 送付いただいたキー
+                'Authorization': `Bearer ${LINE_ACCESS_TOKEN}`
             },
             body: JSON.stringify({
-                to: "all_users", // チームの仕様に合わせる
-                title: "ゴミ満杯通知",
-                body: `明日（${targetDate}）はゴミ回収日です！`,
-                data: { targetDate }
+                to: LINE_USER_ID,
+                messages: [
+                    {
+                        type: 'text',
+                        text: `🗑【ゴミ満杯通知】\nゴミ箱がいっぱいになりました！\n\n次回の回収日は【${targetDate}】です。出し忘れに注意しましょう！`
+                    }
+                ]
             })
         });
 
-        if (!firebaseResponse.ok) {
-            throw new Error('Firebase APIへの通知に失敗しました');
+        if (!lineResponse.ok) {
+            const errorData = await lineResponse.json();
+            console.error('LINE API Error Detail:', errorData);
+            throw new Error('LINE APIへの通知に失敗しました');
         }
 
         // --- Step 5: 成功したらステータス更新 ---
-        // 【ステップ5】 最終更新: 通知が成功したら、Supabaseのstatusを 'sent' に更新
+        // 【ステップ5】 通知が成功したら、Supabaseのstatusを 'sent' に更新
         await db.query(
             "UPDATE notifications SET status = 'sent' WHERE id = $1",
             [notificationId]
         );
-        console.log(' -> [Step 5] 送信完了ステータスに更新しました ✅');
+        console.log(' -> [Step 5] LINE送信完了。ステータスを更新しました ✅');
 
         res.json({ success: true, status: 'sent', date: targetDate });
 
     } catch (err) {
-        console.error('[Error]', err);
+        console.error('[Error]', err.message);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
