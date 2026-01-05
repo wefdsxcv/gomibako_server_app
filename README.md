@@ -14,3 +14,6 @@ node.js サーバー
 db　supabase
 notification テーブル（通知管理用テーブル）
 通知処理用外部api    firebase 
+
+
+とかいってたけど、firebase の方にサーバー側のビジネスロジックとか。書いた方が楽か？
