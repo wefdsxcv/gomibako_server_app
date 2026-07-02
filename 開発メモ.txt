@@ -1,0 +1,710 @@
+
+合同08_大菅裕生_?_?_?_?   5人
+
+[ハード合同08]
+
+[shinyaoguri.icon]第14回は誰がどんな役割で作業を進めますか？
+
+[最終発表テーマ]
+アイデア；
+・冷蔵庫の在庫管理アプリ（画像があって、その下にテキスト
+➖️➕️ボタンがあり、➕️押すとpostリクエスト(bodyに卵とか画像、テキストに対応するもの)→サーバー側でdbに保存
+➖️押すと、deleteリクエスト）　　　　きつい
+＊組み込み拡張案
+＊重量センサーで「残量の自動推定」
+＊温度センサーで「冷蔵庫の状態監視」（これか？？）　　
+＊バーコードで入庫管理（qrコード）
+・倒れ検知 × 通知アプリ（高齢者・ペット？・子ども向け）
+＊加速度 + ジンャイロが使えるなら。
+＊高齢者の転倒監視
+＊赤ちゃんの「寝返りしすぎ」「ベッドから落ちそう」
+・自転車盗難防止デバイス × 位置＋加速度アプリ　　（位置を送信するのは　盗難された際に便利か？？）
+＊加速度センサー × アプリ通知の最強コンビ。
+＊自転車に小型デバイスを取り付ける
+＊ちょっと揺れたら加速度センサーで感知（盗まれてなくても揺れたら反応するのは無理じゃないか？）
+＊スマホへアラーム通知　　　　技術敵に難しい。
+・家の温度・湿度・揺れを監視する「ミニ防災ステーション」
+＊加速度（地震）＋ アプリ通知の組み合わせ。
+＊地震（加速度）検知 → 速報通知　　　　ずれてる。
+・冷暖房自動ON/OFF
+＊温度センサー使えば行けるんじゃね？
+・外出時の“消し忘れ”検知アプリ（アイロン・ストーブ）
+＊温度センサーで異常加熱を検知
+・移動速度計測(歩く速度を計測、それによる歩いた分の消費カロリーなどの計算、表示、目標歩行距離、時間などの表示)
+・パンチ速度、振る速度等の計測、保存(耐久力次第)
+・温度センサーによる飲料、食料の保存状態の管理、コンビニ等の温度管理の簡略化
+・泡だて器でかき混ぜる速度を計測し、それによる目標料理(メレンゲ等)の完成時間表示。
+
+＊ゴミ捨てのタイミング　ゴミ箱の蓋の裏にセンサーを取り付け、ゴミの蓄積量を計測。いっぱいになると通知される。また、ゴミの回収日と連動して捨てるかどうかを判断する。　　課題的には沿ってると思う。　　　＊
+
+＊姿勢矯正　座り方や座っている時間を分析し、姿勢が悪くなったり、貧乏ゆすりをしているのをフィードバックする　　椅子に付ければ物だから課題に沿ってはいる。
+＊料理スキルアップ　泡立てや返しの力加減や角度、速度
+＊ドアの開閉速度によってその日の気分を計測
+・人が部屋に近づいてくるのをスマホに通知　→　　　　難しそう
+・枕に取り付けて睡眠の質を検知→それらを使っている人たちでアプリ内でランキング化
+
+
+
+
+ep24025 倒れ検知　高齢者等
+ep24027 部屋の温度検知　人の接近
+ep24060 温湿度検知　各部屋の状態を一度にチェックすることが出来る。冷暖房・火災の検知。鞄の中にも応用できる。
+ep24032 温度検知(温度管理)、在庫管理(重量による残量の自動測定)
+ep24068 温度検知、移動速度計測
+
+温度センサーで「冷蔵庫の状態監視」
+家の温度・湿度を監視する「ミニ防災ステーション」
+冷暖房自動ON/OFF
+外出時の“消し忘れ”検知アプリ（アイロン・ストーブ）
+温度センサーによる飲料、食料の保存状態の管理、コンビニ等の温度管理の簡略化
+
+
+主機能；防災アプリ（温度によって、火事等通知）
+副機能；
+温度モニタリング
+しきい値で火事・熱中症予兆の通知
+現在の温度の一覧表示
+温度等をグラフ化
+
+環境　；web、モバイル
+環境構築；
+dockerfile を作って共有か、
+自前で各個人で環境構築か
+フロント ；html ,react js (ts)
+バック　；node.js  express  js(ts)
+フロント、バック両刀；next.js　
+db postgresql,mysql,orcle,firebase,supabase 等
+
+対象ユーザー；ペット飼ってる人、高齢者のいる家族等
+付加価値；　（line）通知、　等値（熱中症とか判定する値）を自由にカスタマイズ可能
+
+M5StickC Plus2側
+→ 温度・湿度取得
+→ 定期的にサーバーへ送信。仕組みは知らんがwifiを使ってapiサーバーにpostリクエスト　（bodyに温度、湿度？？）
+
+アプリ側（フロント側）
+→ M5Stack の値をリアルタイム表示　（get リクエストを初回レンダリング時や、更新時に発火）
+→ 状態を「快適・暑い・危険・火災疑い」などに分類　（？？？
+→ 通知（プッシュ通知 or LINE通知）（？？？)
+
+アプリ側（バック側）
+node.js 等でapiサーバー構築。（べつにnode.jsじゃなくてもいい）	
+post リクエスト用のルート定義→db（supabase 予定）にinsert で追加。
+
+db　(クラウドサービスを利用。supabase等）（バックエンドを再起動した瞬間にデータ消える。複数端末などで不都合出る為必要と思われ）
+
+温度、湿度を感知して火事検知（状態を快適、熱中症等振り分け）、一覧で部屋の温度閲覧可能（冷暖房の操作をweb or モバイルアプリから操作可能、通知。
+
+2025年12月15日
+倒れ検知 × 通知アプリ
+★ゴミ捨てのタイミング　ゴミ箱の蓋の裏にセンサーを取り付け、ゴミの蓄積量を計測。いっぱいになると通知される。また、ゴミの回収日と連動して捨てるかどうかを判断する。
+泡だて器でかき混ぜる速度を計測し、それによる目標料理(メレンゲ等)の完成時間表示。
+
+超音波距離センサ
+
+m5stack側
+M5Stack画面
+「満杯」
+「明日ゴミの日」
+ゲージ表示
+ブザー or LED　　　とか？
+
+アプリ側　　　
+web 
+node.js サーバー
+db　supabase
+notification テーブル（通知管理用テーブル）
+
+ UNIQUE (dedupe_key)制約で　同じ日時をはじけば行ける。
+ uqine制約で　はじくんだったら、outboxテーブルとかいらんくね。 notificationテーブルにinsert を同じトランザクション内でやったあとに、　別workerが通知、外部apiを発火すればよくね。　
+→そう。別に
+API
+ ├─ INSERT notification
+ └─ COMMIT
+
+worker
+ └─ status = pending を送信　　これでいい。outboxテーブルの意義は外部api失敗用。職務分離とか。
+
+✅ 今回は notification テーブル単体＋worker が一番良い
+理由はシンプルで👇
+通知の種類が 1つ
+外部APIも 1種類
+リアルタイム性がそこまで厳しくない
+課題としては シンプルな方が評価される（リクエスト数はそんなないので、redisとかもいらん。）
+👉 outbox を分けると「やりすぎ」になりやすい　　らしい。
+
+[shinyaoguri.icon][コードブロックを使ってプログラムを載せよう]
+
+Node.js サーバー
+ゴミ回収日の曜日判定
+notification INSERT（重複防止）
+
+notification (
+  id SERIAL PRIMARY KEY,
+  type TEXT NOT NULL,          -- TRASH_FULL　　　　これなんであるん？？→ゴミ満杯通知だけ　ならいらん。uniquetarget_data　のユニークだけでいい。
+  target_date DATE NOT NULL,   -- 回収日
+  status TEXT NOT NULL,        -- pending / sent / failed
+  retry_count INT DEFAULT 0,　　　これ何？→失敗したかをカウント？？いるか？？　
+  created_at TIMESTAMP DEFAULT NOW(),　　
+  UNIQUE (type, target_date)
+);
+
+apiサーバー側
+ 1. 状態受信（FULL）
+ 2. 明日が回収日か判定
+ 3. INSERT notification
+  すでにあれば UNIQUE 制約で弾かれる
+ 4. COMMIT
+ 5. 即レスポンス
+
+notification worker（非同期）
+1. notification where status = pending
+2. 外部API送信
+3. 成功 → status = sent
+4. 失敗 → status = failed, retry_count++　　　　　　　今回はこれでいい。
+
+通知外部api
+LINE Messaging API
+スマホの LINE に直接通知
+line apiは詳しく知らん。
+「1:1でLINE Notifyから通知」
+通知先：ログインした本人のLINE
+https://chatgpt.com/share/693f6d7d-282c-800a-bcd5-39419f5050c6
+グループ通知＊
+トークン発行時にそのグループを選択
+そのトークンでAPIを叩く　　　　
+
+～　実装　～
+git hub は使わないでコードを送る方針でやる。自分だけ、完成形としてgit hubリポジトリにpushしていくこととする。　デプロイ用とか。node.jsサーバーだけなのでdocker未使用とする。あと、普通のjsでやる。　tsは型定義とか厳密にやる必要ないので、今回はなし。
+npm init -y　　　package.json生成。
+npm install express pg  dotenv　　　　pgはpostgresql クライアント生成用かな
+touch .env
+touch server.js
+touch db.js
+touch worker.js
+
+.env
+DATABASE_URL=postgresql://postgres.ivwkxipqyemkqouioxku:ytrewwsdfghjk7t@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres
+LINE Messaging API（Bot）　　
+# LINE Messaging API 設定
+# "Bearer " という文字は含めず、トークン文字列だけ貼ってください
+LINE_CHANNEL_ACCESS_TOKEN=ここにチャネルアクセストークン
+# 送信先のUser ID (あなたのID)
+LINE_USER_ID=ここにUから始まるユーザーID
+　だれかやって登録とか＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+2025/12/15 24025
+lineのやつ誰かやれる人やってください。
+あとコードテストしてないから、やって下さい。
+役割分担はserver.js worker.js とか？？　　ローカルではなく、render にapiサーバーともどもデプロイします。現状のコードだとローカルなので、誰か修正して下さい。
+
+2025/12/21.22　 24025
+役割分担；
+server.js 流れ理解担当 1　 ep24025
+worker.js  1   ep24032
+line apiの手続き、.env記載等　1　　
+m5stack　側 2
+root/
+ ├── .env
+ ├── package.json
+ ├── db.js          # DB接続設定
+ ├── server.js      # APIサーバー
+ └── worker.js      # 通知ワーカー
+
+フロントm5stackからは満杯の時に　n秒等の条件でpostリクエストが来ると仮定。bodyは空
+
+2025/12/22　作業進捗
+
+// server.js
+const express = require('express');
+const db = require('./db');
+const app = express();
+const worker = require('./worker'); // ★追加: 作ったworkerを読み込む
+app.use(express.json());
+// ♻️ 設定: ゴミ回収曜日 (0=日, 1=月, 2=火, 3=水, 4=木, 5=金, 6=土)
+// 例: 月曜(1) と 木曜(4) なら
+// 例: 水曜だけなら
+const COLLECTION_DAYS =;
+/**
+ 日本時間を基準に、次の回収日(YYYY-MM-DD)を計算する関数
+*/
+//usecase//
+function getNextCollectionDate() {
+// 1. 現在時刻を日本時間(JST)で取得
+//pcは「日本時間 (JST)」に設定されている。 なので、new Date() を実行すると、「日本時間」
+//Renderなどのクラウドサービスは、世界中の人が使うので、特定も国の時間ではなく 「世界標準時 (UTC)」 に設定されていることがほとんどです
+const now = new Date();
+const jstOffset = 9 * 60; // JSTはUTC+9時間      時間を分に変換
+const localNow = new Date(now.getTime() + (jstOffset + now.getTimezoneOffset()) * 60 * 1000);
+//now.getTimezoneOffset() は、現在のタイムゾーンとUTCの差を「分」で返すメソッド　　　*60　分を秒に変換　*1000 秒をミリ秒に変換
+// 2. 「明日」から順にループして、指定された曜日を探す
+// (今日が回収日でも、もう間に合わない想定で明日以降を探す設定にしています)
+for (let i = 1; i <= 7; i++) {
+const checkDate = new Date(localNow);
+//今日の日本基準の時間が入ったオブジェクトを生成。
+checkDate.setDate(localNow.getDate() + i); // 1日ずつ足す
+//setDate は、日付を設定するメソッド。　getDate() は、日付を取得するメソッド
+const dayOfWeek = checkDate.getDay(); // 曜日を取得 (0-6)
+
+// 設定した曜日に含まれていれば、その日を返す
+if (COLLECTION_DAYS.includes(dayOfWeek)) {
+  return checkDate.toISOString().split('T')[0];
+  //toISOString()
+  //まずは、日付データを「世界標準の文字形式（ISO 8601形式）」に変換
+  //例: 2024-06-15T15:00:00.000Z
+  //split は 「指定した文字で、包丁のようにスパッと切断して分割する」 メソッド。
+  //"T"の部分で分割して、[0]番目（=日付部分）を取得してreturn
+}
+
+}
+return null; // 基本ありえないがエラー回避
+}
+// ゴミ満杯検知用エンドポイント
+app.post('/api/trash-full', async (req, res) => {
+try {
+// 日付計算ロジック（さっきの関数）
+const targetDate = getNextCollectionDate();
+//return してきたものを変数に受け取る。
+console.log(`[API] 満杯検知: 次回の回収日は ${targetDate} です。`);
+
+//repository//
+// 【修正箇所】 typeカラムを削除したSQLに変更
+const query = `
+  INSERT INTO notifications (target_date, status)
+  VALUES ($1, 'pending')
+  ON CONFLICT (target_date) DO NOTHING
+  RETURNING id;
+`;
+//「プレースホルダー（仮置き場）」 です。 SQLの中に直接変数を埋め込まず、あとから安全に値を代入するための「穴埋めマーク」
+
+// 【修正箇所】 SQLに渡すデータも targetDate ひとつだけにする
+const result = await db.query(query, [targetDate]);
+//db.query() は、db.js で定義した関数。 第一引数にSQL文、第二引数にプレースホルダー用の配列を渡す
+
+if (result.rows.length > 0) {//ユニーク制約違反していなかったら、idが一つ返ってくるはず
+  console.log(` -> 予約完了 (ID: ${result.rows[0].id})`);
+  res.json({ success: true, status: 'queued', date: targetDate });
+} else {
+  console.log(' -> すでに予約済みのためスキップ');
+  res.json({ success: true, status: 'already_exists', date: targetDate });
+}
+
+} catch (err) {
+console.error('[API Error]', err);
+res.status(500).json({ success: false, error: 'Internal Server Error' });
+}
+// サーバー起動処理
+//Render側が勝手にPORTを指定してくるので、それを使うようにする
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+console.log(`API Server running on port ${PORT}`);
+// ★追加: サーバー起動と同時に、定期実行タイマーもスイッチON！
+worker.start(); 
+
+});
+});
+// db.js
+require('dotenv').config();
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+// エラーハンドリング（放置されたクライアントのエラーで落ちないように）
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+});
+
+module.exports = {
+  // 通常のクエリ用
+  //module.exports ＝ 「このファイルを読み込んだ人に渡すもの」 です。 ここでは、関数が2つ入った オブジェクト を渡しています。
+  //「1番目にSQL、2番目にデータ配列を渡す」という順番は、絶対の決まり事です。text;sql文　params;パラメータ配列
+  query: (text, params) => pool.query(text, params),
+  // トランザクション制御用（clientを個別に取得）
+  getClient: () => pool.connect(),
+};
+
+
+
+// worker.js
+import dotenv from 'dotenv';
+import pg from 'pg';
+import admin from 'firebase-admin';
+
+dotenv.config();
+
+const { Pool } = pg;
+
+// 定数
+const INTERVAL_MS = 10_000; //10秒ごとに通知
+const MAX_RETRY = 3;//最大リトライ回数
+const BATCH_SIZE = 10;//１回で処理する通知数
+
+// =======================
+// DB 接続
+// =======================
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,  //変更点
+});
+
+// =======================
+// Firebase 初期化
+// =======================
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID, //変更
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL, //変更
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'), //変更
+    }),
+  });
+}
+
+// =======================
+// Firebase 通知送信
+// =======================
+async function sendFirebase(message) {
+  const payload = {
+    notification: {
+      title: 'ゴミ箱満杯通知',
+      body: message,
+    },
+  };
+
+  if (process.env.FIREBASE_TOPIC) {
+    payload.topic = process.env.FIREBASE_TOPIC;//変更
+  } else if (process.env.FIREBASE_DEVICE_TOKEN) {
+    payload.token = process.env.FIREBASE_DEVICE_TOKEN; //変更
+  } else {
+    throw new Error('Firebase送信先が未設定');
+  }
+
+  await admin.messaging().send(payload);
+}
+
+// =======================
+// 通知文生成
+// =======================
+function buildMessage(n) {
+  return [
+    '🗑 ゴミ箱が満杯です',
+    `回収日：${n.target_date}`,
+    `通知ID：${n.id}`,
+  ].join('\n');
+}
+
+// =======================
+// 通知処理本体
+// =======================
+async function processNotifications() {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    const result = await client.query(
+      `
+      SELECT id, target_date
+      FROM notifications
+      WHERE status = 'pending'
+        AND retry_count < $1
+      ORDER BY created_at
+      LIMIT $2
+      FOR UPDATE SKIP LOCKED
+      `,
+      [MAX_RETRY, BATCH_SIZE]
+    );
+
+    for (const n of result.rows) {
+      try {
+        await client.query(
+          `UPDATE notifications SET status = 'processing' WHERE id = $1`,
+          [n.id]
+        );
+
+        const message = buildMessage(n);
+        await sendFirebase(message);
+
+        await client.query(
+          `UPDATE notifications SET status = 'sent' WHERE id = $1`,
+          [n.id]
+        );
+
+        console.log(`✅ sent id=${n.id}`);
+      } catch (err) {
+        await client.query(
+          `
+          UPDATE notifications
+          SET status = 'pending',
+              retry_count = retry_count + 1
+          WHERE id = $1
+          `,
+          [n.id]
+        );
+
+        console.error(`❌ failed id=${n.id}`, err.message);
+      }
+    }
+　　　// 超過はdead　永久ループ防止
+    await client.query(
+      `
+      UPDATE notifications
+      SET status = 'dead'
+      WHERE retry_count >= $1
+        AND status != 'sent'
+      `,
+      [MAX_RETRY]
+    );
+
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+// =======================
+// 定期実行（重複防止）
+// =======================
+let running = false;
+let timer = null;
+
+function start() {
+  if (timer) return; // 二重起動防止
+
+  timer = setInterval(async () => {
+    if (running) return;
+    running = true;
+
+    try {
+      await processNotifications();
+    } catch (err) {
+      console.error('worker loop error:', err);
+    } finally {
+      running = false;
+    }
+  }, INTERVAL_MS);
+
+  console.log(' notification worker started');
+}
+
+// =======================
+// Graceful shutdown
+// =======================
+process.on('SIGINT', async () => {
+  console.log('shutting down worker...');
+  clearInterval(timer);
+  await pool.end();
+  process.exit(0);
+});
+
+// server.js から呼ばれる
+module.export { start };
+
+
+
+
+// firebase functions (index.js)
+
+const { onRequest } = require("firebase-functions/v2/https");
+
+const admin = require("firebase-admin");
+
+admin.initializeApp();
+
+ep24025 2025/12/22
+firebase 側のサーバー起動コード書いて。 日時判定も。ゴミ回収日時を変数として定義でいい。
+exports.trashFull = onRequest(async (req, res) => {
+
+    // 1. 日付計算ロジック（そのまま使える）
+
+    const targetDate = getNextCollectionDate();　　日時判定処理を書いて
+
+
+
+    // 2. Firestoreに保存（PostgreSQLの代わり）　　　どういうテーブル構造か知らないから　分からん。
+
+    await admin.firestore().collection("notifications").add({
+
+        date: targetDate,
+
+        status: "pending"
+
+    });
+
+
+ここで直でapiを叩く。
+    // 3. 通知送信（Workerがいらない、この場で送ればいい）
+
+    await sendLineMessage("ゴミ満杯です！");
+
+
+0
+    res.send("OK");
+
+
+
+
+2025 /12/22     render にデプロイとか、定期的に起動とかだるいから、　firebase の方でやります。　firebase 側のアカウントやどういう風になってるかまじで分からんから、全部送るか共有して下さい。　　ep24025 
+
+
+distance = フタ → ゴミ表面までの距離　　秒数　などでアプリ側に送る。アプリ側でゴミ回収日、曜日判定 条件で通知
+
+ステップ場所内容1. リクエストM5StackRender の API エンドポイントを叩く。2. DB挿入試行RenderSupabase に target_date（今日/明日）を INSERT。3. 重複判定SupabaseUNIQUE 制約でエラーなら ここで終了（二重送信防止）。4. Line messagin API 発火Render fetch を使い、チームメンバーが作った API を叩く。5. 最終更新Render通知が成功したら、Supabase の status を sent に更新。　
+
+// server.js
+const express = require('express');
+const db = require('./db');
+const app = express();
+app.use(express.json());
+// 回収曜日の設定
+const COLLECTION_DAYS =;
+/**
+ 日本時間基準で次の回収日を計算
+*/
+function getNextCollectionDate() {
+const now = new Date();
+const jstOffset = 9 * 60;
+const localNow = new Date(now.getTime() + (jstOffset + now.getTimezoneOffset()) * 60 * 1000);
+for (let i = 1; i <= 7; i++) {
+const checkDate = new Date(localNow);
+checkDate.setDate(localNow.getDate() + i);
+if (COLLECTION_DAYS.includes(checkDate.getDay())) {
+return checkDate.toISOString().split('T');
+}
+}
+return null;
+}
+/**
+ 満杯検知API
+ 【ステップ1】 リクエスト: M5StackがRenderのAPIエンドポイントを叩く
+*/
+app.post('/api/trash-full', async (req, res) => {
+try {
+const targetDate = getNextCollectionDate();
+console.log(`[Step 1 & 2] 処理開始: 対象日 ${targetDate}`);
+ // --- Step 2 & 3: DB挿入 ＆ 重複判定 ---
+ // 【ステップ2】 DB挿入試行: RenderからSupabaseに target_date を INSERT
+ // 【ステップ3】 重複判定: UNIQUE制約(ON CONFLICT)で、すでに登録済なら何もしない
+ const insertQuery = `
+     INSERT INTO notifications (target_date, status)
+     VALUES ($1, 'pending')
+     ON CONFLICT (target_date) DO NOTHING
+     RETURNING id;
+ `;
+ const result = await db.query(insertQuery, [targetDate]);
+
+ // 重複していた場合（result.rows が空 ＝ すでに INSERT されている）
+ if (result.rows.length === 0) {
+     console.log(' -> [Step 3] すでに今日分は通知済みです。スキップします。');
+     return res.json({ success: true, message: 'Already processed today' });
+ }
+
+ const notificationId = result.rows[0].id;
+ console.log(` -> [Step 3] DB登録成功 (ID: ${notificationId})`);
+
+ // --- Step 4: チームメンバーの Firebase API を叩く ---
+ // 【ステップ4】 Firebase API 発火: fetchを使い、チームメンバーが作ったAPIを叩く
+ // ※チームメンバーに「Firebase Cloud FunctionsなどのURL」をもらってください
+ const FIREBASE_NOTIFY_URL = process.env.FIREBASE_NOTIFY_URL; 
+ 
+ console.log(' -> [Step 4] Firebase API発火中...');
+ const firebaseResponse = await fetch(FIREBASE_NOTIFY_URL, {
+     method: 'POST',
+     headers: { 
+         'Content-Type': 'application/json',
+         'X-Firebase-API-Key': process.env.FIREBASE_API_KEY // 送付いただいたキー
+     },
+     body: JSON.stringify({
+         to: "all_users", // チームの仕様に合わせる
+         title: "ゴミ満杯通知",
+         body: `明日（${targetDate}）はゴミ回収日です！`,
+         data: { targetDate }
+     })
+ });
+
+ if (!firebaseResponse.ok) {
+     throw new Error('Firebase APIへの通知に失敗しました');
+ }
+
+ // --- Step 5: 成功したらステータス更新 ---
+ // 【ステップ5】 最終更新: 通知が成功したら、Supabaseのstatusを 'sent' に更新
+ await db.query(
+     "UPDATE notifications SET status = 'sent' WHERE id = $1",
+     [notificationId]
+ );
+ console.log(' -> [Step 5] 送信完了ステータスに更新しました ✅');
+
+ res.json({ success: true, status: 'sent', date: targetDate });
+
+} catch (err) {
+console.error('[Error]', err);
+res.status(500).json({ success: false, error: 'Internal Server Error' });
+}
+});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+console.log(`API Server is running on port ${PORT}`);
+});
+
+
+Channel ID
+2008819566
+Channel secret
+db8ee8011c26399a529c903a0386b74b
+channel アクセストークン
+qPtBFfG8Iw9LviCx4em+bncqmQYClocmRybA2ch1BPTd9uyKsrbOTtJK/qzXPgTKG735fCmno8DAcKqp3xaxyDNIeifi4AUJn2npXbTBK82eveJFWqI39GvO2J39VOP/lb6YeJhImCY72l0Y6HWCVQdB04t89/1O/w1cDnyilFU=
+User ID
+Ue7e7032d4f0ebe579d0cb3999b9b4970
+
+m5stackからpostリクエストを送って　ほしいapiエンドポイントurl 　　body 空　でok　
+https://gomibako-server-app.onrender.com/api/trash-full
+
+2026 01 05 apiリクエストエラー       ep24025
+2026 01 05 supabase postgresql 接続エラー解消。上記のrulにてbody空postリクエスト時にLINEメッセージ送信確認済み。リクエストは４時間に一回ぐらい送った方がいいかも。
+
+m5stackからpostリクエストを送って　ほしいapiエンドポイントurl 　　body 空　でok　
+https://gomibako-server-app.onrender.com/api/trash-full
+
+
+
+ハード側
+
+超音波センサー
+[https://gyazo.com/48446d351ca60821576ef2bf930aa3ea]
+
+型番:HC-SR04
+使いかた、参考ページ
+https://www.kunimiyasoft.com/hc-sr04-m5stickc/　（ボード無し版）
+HC-SR04 – M5StickC
+
+Vcc – 5V
+Gnd – Gnd
+Trig – GPIO26
+Echo – GPIO36
+https://lang-ship.com/blog/work/m5stickc-esp32-arduino-l08-sonic/#toc1　（安全な使い方その1 抵抗での分圧がやりやすいと思われる）
+[合同08_m5stack側実装仮コード]
+[合同08_m5stack側実装仮コード_1]
+[合同08_m5stack側実装仮コード_2]
+[合同08_m5stack側実装仮コード_3]
+[合同08_m5stack側実装仮コード_4]
+[合同08_m5stack側実装仮コード_5]
+[合同08_m5stack側実装仮コード_6]
+3dプリンタを用いて、M5stickC PlusのケースとHC-SR04を作成する
+年明けにシミュレーションをし問題がなければ作成する
+使用STL↓
+https://makerworld.com/ja/models/573271-m5stack-m5stickc-plus-2-rugged-case#profileId-493964
+https://www.printables.com/model/1338788-hinged-case-for-ultrasonic-sensor-hc-sr04/files
+
+デザインルームでできること
+[* ３Dプリンターの使用]
+　本当にいろいろとできる...細かなオブジェや複雑なギミックの物etc...
+[* 掘削機の使用]（見ただけ）
+[* 大型機械の設置]（見ただけ）
+
+[合同08発表資料]
+
+　制作物のタイトル:IoTゴミ蓄積量計測・通知システム
+　メンバーの学籍番号＋氏名:???
